@@ -11,7 +11,15 @@ import { logInfo, logError } from '../utils/logger'
 import { CHINA_GREAT_WALL_DIRECTIONS, CHINA_GREAT_WALL_PASSES } from '@/data/geojsonsources';
 import {TILE_MAP_SRC} from '@/data/tilemapvariants';
 
-// The component's name:
+
+const props = defineProps<{
+  mapOf: {
+    type: 'china' | 'new-york',
+    required: false,
+    default: 'new-york'
+  }
+}>()
+
 // The component's setup:
 const mapId: string = 'leaflet-map'
 const mapOptions = shallowRef({
@@ -95,29 +103,39 @@ onMounted(() => {
   }
   // Fetch the data
   const fetchData = async () => {
-    const url = 'https://raw.githubusercontent.com/longwosion/geojson-map-china/master/china.json'
-    // CHINA_GREAT_WALL_DIRECTIONS['beijing']
-      // 'https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=GeoJSON'
+    const url = props.mapOf === 'new-york' ? 'https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=GeoJSON' : 'https://raw.githubusercontent.com/longwosion/geojson-map-china/master/china.json'
     try {
       const fetchedGeoJsonData = []
-      for await (const [key, value] of Object.entries(CHINA_GREAT_WALL_DIRECTIONS).concat(Object.entries(CHINA_GREAT_WALL_PASSES))) {
-        const response = await fetch(value)
-        const data = await response.json()
-        fetchedGeoJsonData.push({...data,
-          "style": {
-            "color": "#ff7800",
-            "__comment": "all SVG styles allowed",
-            "stroke-width":"10",
-          },
-        })
+      switch (props.mapOf) {
+        case 'new-york':
+          const response = await fetch(url)
+          const data = await response.json()
+          fetchedGeoJsonData.push(data)
+          logInfo('fetched data:', fetchedGeoJsonData)
+          geoJsonData.value = fetchedGeoJsonData;
+          break
+        case 'china':
+          for await (const [key, value] of Object.entries(CHINA_GREAT_WALL_DIRECTIONS).concat(Object.entries(CHINA_GREAT_WALL_PASSES))) {
+            const response = await fetch(value)
+            const data = await response.json()
+            fetchedGeoJsonData.push({...data,
+              "style": {
+                "color": "#ff7800",
+                "__comment": "all SVG styles allowed",
+                "stroke-width":"10",
+              },
+            })
+          }
+          const chineseProvinces = await fetch(url).then((response) => response.json())
+          fetchedGeoJsonData.push(chineseProvinces)
+          logInfo('fetched data:', fetchedGeoJsonData)
+          geoJsonData.value = fetchedGeoJsonData;
+          break
+        default:
+          break
       }
-
-      const chineseProvinces = await fetch(url).then((response) => response.json())
-      fetchedGeoJsonData.push(chineseProvinces)
-
-      logInfo('fetched data:', fetchedGeoJsonData)
-      geoJsonData.value = fetchedGeoJsonData;
       mapsLoading.value = false;
+      
     } catch (err) {
       logError('err', err)
     }
