@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1>The Boroughs of New York</h1>
+    <h1>Great Wall of China</h1>
   </header>
   <main>
     <div style="width: 960px; height: 720px"><LeafletMap /></div>
