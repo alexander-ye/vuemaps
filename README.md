@@ -1,5 +1,7 @@
 # vuemaps
 
+Live deployment: https://vuemaps-wfs9numg9-alex-yes-projects.vercel.app/
+
 Initialized using Vite.
 
 ## Out of the Box Vue Instructions
