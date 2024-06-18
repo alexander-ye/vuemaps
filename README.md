@@ -1,6 +1,6 @@
 # vuemaps
 
-Live deployment: https://vuemaps-eight.vercel.app/
+Live deployment: [https://vuemaps-eight.vercel.app/](https://vuemaps-gilt.vercel.app/)
 
 Initialized using Vite.
 
