@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import 'leaflet/dist/leaflet.css';
-import L, { icon, LatLng } from 'leaflet';
+import L, { LatLng, Map } from 'leaflet';
 import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 import { logInfo, logError } from '../utils/logger';
 import { fetchJsonAsync } from '@/utils/serverApi';
@@ -75,11 +75,11 @@ const mapOptions = shallowRef({
   // ),
   layers: [],
 });
-const location = ref(null);
+const location = ref<LatLng | null>(null);
 const geoJsonData = shallowRef([]);
-const mapsLoading = ref(true);
-const mapInstance = shallowRef(null);
-const layerControlInstance = shallowRef(null);
+const mapsLoading = ref<boolean>(true);
+const mapInstance = shallowRef<Map | null>(null);
+const layerControlInstance = shallowRef<L.Control.Layers | null>(null);
 
 watch(mapsLoading, async (mapsLoading, prevMapsLoading) => {
   if (!mapInstance.value) return;
@@ -98,6 +98,7 @@ watch(
   geoJsonData,
   // Watch the geojsonData var for changes:
   async (geoJsonData, prevGeoJsonData) => {
+    if (mapInstance.value === null) return;
     if (geoJsonData?.length) {
       try {
         // onEachFeature for the geoJSON layer
@@ -116,7 +117,7 @@ watch(
             logInfo('Invalid layer:', feature);
           }
         };
-        const controlLayers = {};
+        const controlLayers: Record<string, any> = {};
         const layers = geoJsonData.map((geoJson) => {
           // Add to map
           const geoJsonLayer = L.geoJSON(geoJson, {
