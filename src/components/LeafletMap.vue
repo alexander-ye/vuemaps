@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import 'leaflet/dist/leaflet.css';
-import L, { LatLng } from 'leaflet';
+import L, { icon, LatLng } from 'leaflet';
 import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 import { logInfo, logError } from '../utils/logger';
 import { fetchJsonAsync } from '@/utils/serverApi';
@@ -117,7 +117,9 @@ watch(
             geoJsonLayer,
             geoJson.key
           );
-          // Add to overlay
+
+          // Fit the bounds of geojson
+          mapInstance.value.fitBounds(geoJsonLayer.getBounds());
           return geoJsonLayer;
         });
 
@@ -129,8 +131,12 @@ watch(
         //   'Feature Layer'
         // );
         L.control.layers({}, controlLayers);
-        // Fit the bounds of geojson
-        mapInstance.value.fitBounds(layerGroup.getBounds());
+        L.Icon.Default.prototype.options = {
+          iconUrl: '@/assets/leaflet/map-marker-icon-2x.png',
+          iconRetinaUrl: '@/assets/leaflet/map-marker-icon-2x.png',
+          iconSize: [20, 70],
+          shadowSize: [0, 0],
+        };
       } catch (err) {
         logError(err, err.message);
       }
