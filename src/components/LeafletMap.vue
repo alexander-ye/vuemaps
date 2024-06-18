@@ -132,10 +132,10 @@ onMounted(() => {
     // Create the leaflet map
     const leafletMap = L.map(mapId, mapOptions.value);
     // Create the tile layer and add it to the map:
-    const tile = L.tileLayer(TILE_MAP_SRC['stadiawatercolor'].url, {
+    const tile = L.tileLayer(TILE_MAP_SRC['openstreetmap_base'].url, {
       minZoom: 1,
       maxZoom: 16,
-      attribution: TILE_MAP_SRC['stadiawatercolor'].attribution,
+      attribution: TILE_MAP_SRC['openstreetmap_base'].attribution,
     }).addTo(leafletMap);
     // Create the layer control and add it to the map:
     layerControlInstance.value = L.control
