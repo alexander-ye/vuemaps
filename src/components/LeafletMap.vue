@@ -124,7 +124,6 @@ watch(
         // const layerGroup = L.featureGroup(layers);
         // Add to the map:
         // const geoJsonLayer = layerGroup.addTo(mapInstance.value);
-
         // const newLayer = layerControlInstance.value.addOverlay(
         //   geoJsonLayer,
         //   'Feature Layer'
@@ -168,6 +167,7 @@ onMounted(() => {
     // })
   };
   // Fetch the data
+  // TODO: Cache the data
   const fetchData = async () => {
     try {
       const fetchedGeoJsonData = [];
@@ -187,7 +187,6 @@ onMounted(() => {
           geoJsonData.value = fetchedGeoJsonData;
           break;
         case 'china':
-          // .concat(Object.entries(CHINA_GREAT_WALL_PASSES))
           const greatWall = {
             type: 'FeatureCollection',
             features: [],
@@ -207,6 +206,21 @@ onMounted(() => {
             },
             key: 'Great Wall',
           });
+          const passes = {
+            type: 'FeatureCollection',
+            features: [],
+          };
+          for await (const [key, value] of Object.entries(
+            CHINA_GREAT_WALL_PASSES
+          )) {
+            const data = await fetchJsonAsync(value);
+            passes.features.push(...data.features);
+          }
+          fetchedGeoJsonData.push({
+            ...passes,
+            key: 'Great Wall Passes',
+          });
+
           const provinces = await fetchJsonAsync(
             'https://raw.githubusercontent.com/longwosion/geojson-map-china/master/china.json'
           );
@@ -214,12 +228,13 @@ onMounted(() => {
             ...provinces,
             key: 'Provinces',
           });
-          logInfo('fetched data:', fetchedGeoJsonData);
+
           geoJsonData.value = fetchedGeoJsonData;
           break;
         default:
           break;
       }
+      logInfo('fetched data:', fetchedGeoJsonData);
       mapsLoading.value = false;
     } catch (err) {
       logError('err', err);
