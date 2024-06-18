@@ -1,12 +1,12 @@
 import { createRouter } from 'vue-router'
 
 <template>
-  <header>
-    <h1>Maps</h1>
-  </header>
-  <main>
-    <div style="width: 960px; height: 720px"><LeafletMap /></div>
-  </main>
+  <div style="display: flex; flex-direction: column; flex: 1">
+    <header>
+      <h1>World Map</h1>
+    </header>
+    <LeafletMap width="100%" height="100%" />
+  </div>
 </template>
 
 <script setup lang="ts">

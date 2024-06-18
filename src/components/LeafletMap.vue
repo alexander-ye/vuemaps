@@ -1,7 +1,8 @@
 <template>
+  <!-- TODO: Separate thed etails from the map so the components aren't so entangled with styling (e.g. flex interactions) -->
   <div
     v-if="mapsLoading"
-    style="display: column; flex-direction: row; align-items: center; gap: 4px"
+    style="{display: column; flex-direction: row; align-items: center; gap: 4px; }"
   >
     <v-progress-linear indeterminate></v-progress-linear>
     <p>Loading...</p>
@@ -26,7 +27,9 @@
       </tbody>
     </v-table>
   </div>
-  <div :id="mapId"></div>
+  <div style="background: red; flex: 1">
+    <div :id="mapId"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -48,6 +51,14 @@ const props = defineProps({
   startLatLng: {
     type: LatLng,
     default: new LatLng(37, 240),
+  },
+  width: {
+    type: String,
+    default: '960px',
+  },
+  height: {
+    type: String,
+    default: '720px',
   },
 });
 

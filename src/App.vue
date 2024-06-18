@@ -20,3 +20,25 @@
 import { RouterLink, RouterView } from 'vue-router';
 import LeafletMap from './components/LeafletMap.vue';
 </script>
+
+<style>
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+</style>
