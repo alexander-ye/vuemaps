@@ -35,3 +35,5 @@ const vuetify = createVuetify({
   directives,
 })
 createApp(App).use(router).use(vuetify).mount('#app')
+
+// NOTE: FOR SAFE BUILD COMMAND: //"run-p type-check \"build-only {@}\" --",
