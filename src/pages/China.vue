@@ -9,9 +9,7 @@ import { createRouter } from 'vue-router'
       <!-- <v-switch label="Show provinces"></v-switch>
       <v-switch label="Show Great Wall"></v-switch>
       <v-switch label="Show Great Wall Gates"></v-switch> -->
-      <LeafletMap :map-of="'china'" 
-      :start-lat-lng="new LatLng(32.5, 104.5)"
-      />
+      <LeafletMap map-of="china" :start-lat-lng="new LatLng(32.5, 104.5)" />
     </div>
   </main>
 </template>
@@ -19,6 +17,5 @@ import { createRouter } from 'vue-router'
 <script setup lang="ts">
 // Import components and add to components obj
 import { LatLng } from 'leaflet';
-import LeafletMap from '../components/LeafletMap.vue'
-
+import LeafletMap from '../components/LeafletMap.vue';
 </script>

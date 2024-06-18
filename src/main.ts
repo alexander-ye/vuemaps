@@ -1,39 +1,48 @@
-import { createApp } from 'vue'
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import { createRouter, type RouterOptions, createMemoryHistory } from 'vue-router'
-import App from './App.vue'
-import Home from './pages/Home.vue'
-import China from './pages/China.vue'
-import NewYork from './pages/NewYork.vue'
+import { createApp } from 'vue';
+import 'vuetify/styles';
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import {
+  createRouter,
+  type RouterOptions,
+  createMemoryHistory,
+} from 'vue-router';
+import App from './App.vue';
+import Home from './pages/Home.vue';
+import NewYork from './pages/NewYork.vue';
+import BayArea from './pages/BayArea.vue';
+import China from './pages/China.vue';
 
 const routes = [
   {
     path: '/',
-    component: Home
-  },
-  {
-    path: '/china',
-    component: China
+    component: Home,
   },
   {
     path: '/new-york',
-    component: NewYork
-  }
-]
+    component: NewYork,
+  },
+  {
+    path: '/bay-area',
+    component: BayArea,
+  },
+  {
+    path: '/china',
+    component: China,
+  },
+];
 
 const routerOptions: RouterOptions = {
   routes,
-  history: createMemoryHistory()
-}
+  history: createMemoryHistory(),
+};
 
-const router = createRouter(routerOptions)
+const router = createRouter(routerOptions);
 const vuetify = createVuetify({
   components,
   directives,
-})
-createApp(App).use(router).use(vuetify).mount('#app')
+});
+createApp(App).use(router).use(vuetify).mount('#app');
 
 // NOTE: FOR SAFE BUILD COMMAND: //"run-p type-check \"build-only {@}\" --",

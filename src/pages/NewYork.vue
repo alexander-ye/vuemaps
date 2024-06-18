@@ -6,10 +6,7 @@ import { createRouter } from 'vue-router'
   </header>
   <main>
     <div style="width: 960px; height: 720px">
-      <LeafletMap 
-      :map-of="'new-york'"
-      :start-lat-lng="new LatLng(40.5, -74)"
-      />
+      <LeafletMap map-of="new-york" :start-lat-lng="new LatLng(40.5, -74)" />
     </div>
   </main>
 </template>
@@ -17,5 +14,5 @@ import { createRouter } from 'vue-router'
 <script setup lang="ts">
 // Import components and add to components obj
 import { LatLng } from 'leaflet';
-import LeafletMap from '../components/LeafletMap.vue'
+import LeafletMap from '../components/LeafletMap.vue';
 </script>
