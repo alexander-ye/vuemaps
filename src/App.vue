@@ -11,7 +11,7 @@
     <RouterLink to="/china" style="text-decoration: none">China</RouterLink>
   </nav>
   <main>
-    <RouterView :key="$route.path" />
+    <RouterView :key="$route.fullPath" />
   </main>
 </template>
 

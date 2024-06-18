@@ -3,11 +3,7 @@ import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
-import {
-  createRouter,
-  type RouterOptions,
-  createMemoryHistory,
-} from 'vue-router';
+import { createRouter, type RouterOptions, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import Home from './pages/Home.vue';
 import NewYork from './pages/NewYork.vue';
@@ -21,21 +17,24 @@ const routes = [
   },
   {
     path: '/new-york',
+    name: 'New York City',
     component: NewYork,
   },
   {
     path: '/bay-area',
+    name: 'Bay Area',
     component: BayArea,
   },
   {
     path: '/china',
+    name: 'China',
     component: China,
   },
 ];
 
 const routerOptions: RouterOptions = {
   routes,
-  history: createMemoryHistory(),
+  history: createWebHistory(),
 };
 
 const router = createRouter(routerOptions);
