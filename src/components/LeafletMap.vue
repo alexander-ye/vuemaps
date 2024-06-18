@@ -12,13 +12,11 @@ import { CHINA_GREAT_WALL_DIRECTIONS, CHINA_GREAT_WALL_PASSES } from '@/data/geo
 import {TILE_MAP_SRC} from '@/data/tilemapvariants';
 
 
-const props = defineProps<{
+const props = defineProps({
   mapOf: {
-    type: 'china' | 'new-york',
-    required: false,
-    default: 'new-york'
+    type: String,
   }
-}>()
+  })
 
 // The component's setup:
 const mapId: string = 'leaflet-map'
@@ -103,12 +101,11 @@ onMounted(() => {
   }
   // Fetch the data
   const fetchData = async () => {
-    const url = props.mapOf === 'new-york' ? 'https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=GeoJSON' : 'https://raw.githubusercontent.com/longwosion/geojson-map-china/master/china.json'
     try {
       const fetchedGeoJsonData = []
       switch (props.mapOf) {
         case 'new-york':
-          const response = await fetch(url)
+          const response = await fetch('https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=GeoJSON')
           const data = await response.json()
           fetchedGeoJsonData.push(data)
           logInfo('fetched data:', fetchedGeoJsonData)
@@ -126,7 +123,7 @@ onMounted(() => {
               },
             })
           }
-          const chineseProvinces = await fetch(url).then((response) => response.json())
+          const chineseProvinces = await fetch('https://raw.githubusercontent.com/longwosion/geojson-map-china/master/china.json').then((response) => response.json())
           fetchedGeoJsonData.push(chineseProvinces)
           logInfo('fetched data:', fetchedGeoJsonData)
           geoJsonData.value = fetchedGeoJsonData;
