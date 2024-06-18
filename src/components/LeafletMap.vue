@@ -105,20 +105,33 @@ watch(
             logInfo('Invalid layer:', feature);
           }
         };
-        geoJsonData.forEach((geoJson) => {
-          // Add to the map:
+        const controlLayers = {};
+        const layers = geoJsonData.map((geoJson) => {
+          // Add to map
           const geoJsonLayer = L.geoJSON(geoJson, {
             onEachFeature: onEachFeature,
             style: geoJson.style ?? {},
           }).addTo(mapInstance.value);
           // Add to the layer control:
-          layerControlInstance.value.addOverlay(
+          controlLayers[geoJson.key] = layerControlInstance.value.addOverlay(
             geoJsonLayer,
-            geoJsonLayer.key ?? 'Feature Layer'
+            geoJson.key
           );
-          // Fit the bounds of geojson
-          mapInstance.value.fitBounds(geoJsonLayer.getBounds());
+          // Add to overlay
+          return geoJsonLayer;
         });
+
+        // const layerGroup = L.featureGroup(layers);
+        // Add to the map:
+        // const geoJsonLayer = layerGroup.addTo(mapInstance.value);
+
+        // const newLayer = layerControlInstance.value.addOverlay(
+        //   geoJsonLayer,
+        //   'Feature Layer'
+        // );
+        L.control.layers({}, controlLayers);
+        // Fit the bounds of geojson
+        mapInstance.value.fitBounds(layerGroup.getBounds());
       } catch (err) {
         logError(err, err.message);
       }
@@ -160,42 +173,47 @@ onMounted(() => {
       const fetchedGeoJsonData = [];
       switch (props.mapOf) {
         case 'bay-area':
-          fetchedGeoJsonData.push(
-            await fetchJsonAsync(
-              'https://data.sfgov.org/resource/wamw-vt4s.geojson'
-            )
+          const counties = await fetchJsonAsync(
+            'https://data.sfgov.org/resource/wamw-vt4s.geojson'
           );
+          fetchedGeoJsonData.push({ ...counties, key: 'Counties' });
           geoJsonData.value = fetchedGeoJsonData;
           break;
         case 'new-york':
-          fetchedGeoJsonData.push(
-            await fetchJsonAsync(
-              'https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=GeoJSON'
-            )
+          const boroughs = await fetchJsonAsync(
+            'https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=GeoJSON'
           );
+          fetchedGeoJsonData.push({ ...boroughs, key: 'Boroughs' });
           geoJsonData.value = fetchedGeoJsonData;
           break;
         case 'china':
           // .concat(Object.entries(CHINA_GREAT_WALL_PASSES))
+          const greatWall = {
+            type: 'FeatureCollection',
+            features: [],
+          };
           for await (const [key, value] of Object.entries(
             CHINA_GREAT_WALL_DIRECTIONS
           )) {
-            const response = await fetch(value);
-            const data = await response.json();
-            fetchedGeoJsonData.push({
-              ...data,
-              style: {
-                color: '#ff7800',
-                __comment: 'all SVG styles allowed',
-                'stroke-width': '10',
-              },
-              key: key,
-            });
+            const data = await fetchJsonAsync(value);
+            greatWall.features.push(...data.features);
           }
-          const chineseProvinces = await fetch(
+          fetchedGeoJsonData.push({
+            ...greatWall,
+            style: {
+              color: '#ff7800',
+              __comment: 'all SVG styles allowed',
+              'stroke-width': '10',
+            },
+            key: 'Great Wall',
+          });
+          const provinces = await fetchJsonAsync(
             'https://raw.githubusercontent.com/longwosion/geojson-map-china/master/china.json'
-          ).then((response) => response.json());
-          fetchedGeoJsonData.push(chineseProvinces);
+          );
+          fetchedGeoJsonData.push({
+            ...provinces,
+            key: 'Provinces',
+          });
           logInfo('fetched data:', fetchedGeoJsonData);
           geoJsonData.value = fetchedGeoJsonData;
           break;
