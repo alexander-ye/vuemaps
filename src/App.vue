@@ -1,19 +1,12 @@
-
-
-
-
 <template>
    <h1>Maps!</h1>
-  <p>
-    <strong>Current route path:</strong> {{ $route.fullPath }}
-  </p>
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/china">China</RouterLink>
-    <RouterLink to="/new-york">New York</RouterLink>
+  <nav style="display: flex; flex-direction: row; gap: 8px;">
+    <RouterLink to="/" style="text-decoration: none; ">Home</RouterLink>
+    <RouterLink to="/china" style="text-decoration: none; ">China</RouterLink>
+    <RouterLink to="/new-york" style="text-decoration: none; ">New York</RouterLink>
   </nav>
   <main>
-    <RouterView />
+    <RouterView :key="$route.path"/>
   </main>
 </template>
 

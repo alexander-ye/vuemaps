@@ -1,7 +1,10 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 import { createRouter, type RouterOptions, createMemoryHistory } from 'vue-router'
-
+import App from './App.vue'
 import Home from './pages/Home.vue'
 import China from './pages/China.vue'
 import NewYork from './pages/NewYork.vue'
@@ -27,5 +30,8 @@ const routerOptions: RouterOptions = {
 }
 
 const router = createRouter(routerOptions)
-
-createApp(App).use(router).mount('#app')
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+createApp(App).use(router).use(vuetify).mount('#app')
